@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         台灣憲法法庭網站簡易輔助工具
 // @namespace    https://github.com/FelicChen/TampermonkeyPlugins
-// @version      0.4
+// @version      0.5
 // @description  台灣憲法法庭網站簡易輔助工具
 // @author       KUMA-G
 // @match        https://cons.judicial.gov.tw/*
