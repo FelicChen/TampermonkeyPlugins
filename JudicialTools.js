@@ -5,7 +5,7 @@
 // @description  台灣憲法法庭網站簡易輔助工具
 // @author       KUMA-G
 // @match        https://cons.judicial.gov.tw/*
-// @updateURL    https://github.com/FelicChen/TampermonkeyPlugins/blob/main/JudicialTools.js
+// @updateURL    https://raw.githubusercontent.com/FelicChen/TampermonkeyPlugins/main/JudicialTools.js
 // @grant        none
 // ==/UserScript==
 
