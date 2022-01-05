@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         台灣憲法法庭網站簡易輔助工具
 // @namespace    https://github.com/FelicChen/TampermonkeyPlugins
-// @version      0.5
+// @version      0.6
 // @description  台灣憲法法庭網站簡易輔助工具
 // @author       KUMA-G
 // @match        https://cons.judicial.gov.tw/*
@@ -13,8 +13,10 @@
     'use strict';
     /*
     功能
-    1. 刪除屬性title - 因為我不喜歡ˊ_>ˋ
-    2. 加入快速連結指定釋字 - 在右上角，輸入後按enter或是按右邊的按鈕就會直接跳轉
+    1. 刪除屬性title－因為我不喜歡ˊ_>ˋ
+    2. 加入快速連結指定釋字－
+        右上角，輸入後按enter或是按右邊的按鈕就會直接跳轉
+        選單增加【釋字】按鈕 
     */
     // 釋字網址對應（hen長）
     const lm = {
@@ -832,17 +834,24 @@
         "812": "https://cons.judicial.gov.tw/docdata.aspx?fid=100&id=310993",
         "813": "https://cons.judicial.gov.tw/docdata.aspx?fid=100&id=325335"
     };
-    // 刪屬性用的（憲法法庭是2022年才有的，所以會看到舊的東西，懶得改）
-    const removePreTagsTitle = function () {
+    // 刪屬性用的
+    const removeTagsTitle = function () {
         $('*[title]').each(function () {
             if (this.title == '') return;
             this.title = '';
         });
+        let rs = function () {
+            $('.main-nav-list>li').removeAttr('style');
+            $('.header-tiny>.main-nav>nav>.main-nav-list>li').css('width', '10%');
+        }
+        window.addEventListener('resize', rs);
+        $(window).scroll(rs)
+        rs();
     }
     // 跳轉指定釋字
     const createBtnOnNavbar = function () {
         let b = document.getElementsByClassName('header-func');
-        if (b[0] == null) return;
+        let m = document.getElementsByClassName('main-nav-list');
         let g = location.search.replace(/^(\?)/, '').split('&');
         let gl = {};
         for (let i in g) {
@@ -858,39 +867,57 @@
                 }
             }
         }
-        let bx = b[0];
-        let t = document.createElement('input');
-        t.type = 'number';
-        t.min = 1;
-        t.max = 813;
-        t.placeholder = '釋字';
-        t.value = tv;
-        t.style.fontSize = '12px';
-        t.title = '請輸入範圍１～８１３的數字。';
-        let a = document.createElement('a');
-        a.href = '#';
-        a.style.color = 'white';
-        a.title = '連結到指定釋字';
-        let i = document.createElement('i');
-        i.classList = 'fa fa-share';
-        a.append(i);
-        bx.append(t);
-        bx.append(a);
-        let hl = function () {
-            if (lm[t.value] != null) {
-                window.location.href = lm[t.value];
-            } else {
-                alert('輸入錯誤，請輸入範圍１～８１３的數字。');
+        if (b[0] != null) {
+            let bx = b[0];
+            let t = document.createElement('input');
+            t.type = 'number';
+            t.min = 1;
+            t.max = 813;
+            t.placeholder = '釋字';
+            t.value = tv;
+            t.style.fontSize = '12px';
+            t.title = '請輸入範圍１～８１３的數字。';
+            let a = document.createElement('a');
+            a
+            a.style.color = 'white';
+            a.title = '連結到指定釋字';
+            let i = document.createElement('i');
+            i.classList = 'fa fa-share';
+            a.append(i);
+            bx.append(t);
+            bx.append(a);
+            let hl = function () {
+                if (lm[t.value] != null) {
+                    window.location.href = lm[t.value];
+                } else {
+                    alert('輸入錯誤，請輸入範圍１～８１３的數字。');
+                }
             }
+            t.addEventListener('keyup', function (e) {
+                if (e.keyCode == 13) hl();
+            });
+            a.addEventListener('click', function () {
+                hl();
+                return false;
+            });
         }
-        t.addEventListener('keyup', function (e) {
-            if (e.keyCode == 13) hl();
-        });
-        a.addEventListener('click', function () {
-            hl();
-            return false;
-        });
+        if (m[0] != null) {
+            let mx = m[0];
+            let li = document.createElement('li');
+            let ba = document.createElement('a');
+            ba.href = 'javascript:void(0);';
+            ba.innerHTML = '釋字';
+            li.append(ba);
+            mx.append(li);
+            ba.addEventListener('click', function () {
+                let x = Number(prompt('【跳轉到指定釋字】\r\n請輸入範圍１～８１３的數字。'));
+                if (!isNaN(x) && x > 0) {
+                    window.location.href = lm[x.toString()];
+                }
+                return false;
+            });
+        }
     }
-    removePreTagsTitle();
+    removeTagsTitle();
     createBtnOnNavbar();
 })();
