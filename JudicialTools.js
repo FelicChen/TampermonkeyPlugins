@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         台灣憲法法庭網站簡易輔助工具
 // @namespace    https://github.com/FelicChen/TampermonkeyPlugins
-// @version      0.7
+// @version      0.8
 // @description  台灣憲法法庭網站簡易輔助工具
 // @author       KUMA-G
 // @match        https://cons.judicial.gov.tw/*
@@ -836,17 +836,9 @@
     };
     // 刪屬性用的
     const removeTagsTitle = function () {
-        $('*[title]').each(function () {
-            if (this.title == '') return;
-            this.title = '';
+        document.querySelectorAll('*[title]').forEach(function (obj) {
+            obj.title = '';
         });
-        let rs = function () {
-            $('.main-nav-list>li').removeAttr('style');
-            $('.header-tiny>.main-nav>nav>.main-nav-list>li').css('width', '10%');
-        }
-        window.addEventListener('resize', rs);
-        $(window).scroll(rs)
-        rs();
     }
     // 跳轉指定釋字
     const createBtnOnNavbar = function () {
