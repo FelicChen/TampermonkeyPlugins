@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         台灣憲法法庭網站簡易輔助工具
 // @namespace    https://github.com/FelicChen/TampermonkeyPlugins
-// @version      0.6
+// @version      0.7
 // @description  台灣憲法法庭網站簡易輔助工具
 // @author       KUMA-G
 // @match        https://cons.judicial.gov.tw/*
@@ -16,7 +16,7 @@
     1. 刪除屬性title－因為我不喜歡ˊ_>ˋ
     2. 加入快速連結指定釋字－
         右上角，輸入後按enter或是按右邊的按鈕就會直接跳轉
-        選單增加【釋字】按鈕 
+        選單增加【指定釋字】按鈕
     */
     // 釋字網址對應（hen長）
     const lm = {
@@ -851,7 +851,7 @@
     // 跳轉指定釋字
     const createBtnOnNavbar = function () {
         let b = document.getElementsByClassName('header-func');
-        let m = document.getElementsByClassName('main-nav-list');
+        let m = document.getElementsByClassName('fast-nav');
         let g = location.search.replace(/^(\?)/, '').split('&');
         let gl = {};
         for (let i in g) {
@@ -906,8 +906,13 @@
             let li = document.createElement('li');
             let ba = document.createElement('a');
             ba.href = 'javascript:void(0);';
-            ba.innerHTML = '釋字';
+            let bi = document.createElement('i');
+            bi.classList = 'fa fa-search';
+            ba.append(bi);
             li.append(ba);
+            let bp = document.createElement('p');
+            bp.innerHTML = '指定釋字';
+            ba.append(bp);
             mx.append(li);
             ba.addEventListener('click', function () {
                 let x = Number(prompt('【跳轉到指定釋字】\r\n請輸入範圍１～８１３的數字。'));
