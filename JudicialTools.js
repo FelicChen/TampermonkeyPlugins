@@ -853,9 +853,9 @@
             gl[z[0]] = z[1];
         }
         let tv = '1';
-        if (gl['id'] != null) {
+        if (gl.id != null) {
             for (let i in lm) {
-                if (lm[i].indexOf('id=' + gl['id']) > 0) {
+                if (lm[i].indexOf('id=' + gl.id) > 0) {
                     tv = i;
                     break;
                 }
