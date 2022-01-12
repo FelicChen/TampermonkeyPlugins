@@ -4,7 +4,7 @@
 // @description  台灣憲法法庭網站簡易輔助工具
 // @author       KUMA-G
 // @copyright    2022, KUMA-G
-// @license      MIT
+// @license      Free
 // @version      0.8.1
 // @match        https://cons.judicial.gov.tw/*
 // @updateURL    https://raw.githubusercontent.com/FelicChen/TampermonkeyPlugins/main/JudicialTools.js
