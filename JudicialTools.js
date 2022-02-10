@@ -3,9 +3,8 @@
 // @name         台灣憲法法庭網站簡易輔助工具
 // @description  台灣憲法法庭網站簡易輔助工具
 // @author       KUMA-G
-// @copyright    2022, KUMA-G
 // @license      Free
-// @version      0.8.1
+// @version      0.8.2
 // @match        https://cons.judicial.gov.tw/*
 // @updateURL    https://raw.githubusercontent.com/FelicChen/TampermonkeyPlugins/main/JudicialTools.js
 // @grant        none
@@ -876,7 +875,6 @@
             t.style.fontSize = '12px';
             t.title = '請輸入範圍１～８１３的數字。';
             let a = document.createElement('a');
-            a
             a.style.color = 'white';
             a.title = '連結到指定釋字';
             let i = document.createElement('i');
@@ -893,6 +891,9 @@
             }
             t.addEventListener('keyup', function (e) {
                 if (e.keyCode == 13) hl();
+            });
+            t.addEventListener('click', function () {
+                t.select();
             });
             a.addEventListener('click', function () {
                 hl();
