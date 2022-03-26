@@ -4,7 +4,7 @@
 // @description  台灣憲法法庭網站簡易輔助工具
 // @author       KUMA-G
 // @license      Free
-// @version      0.8.2
+// @version      0.8.3
 // @match        https://cons.judicial.gov.tw/*
 // @updateURL    https://raw.githubusercontent.com/FelicChen/TampermonkeyPlugins/main/JudicialTools.js
 // @grant        none
@@ -24,6 +24,13 @@
         選單增加【指定釋字】按鈕
     */
     // 釋字網址對應（hen長）
+    const jn = {
+        "111": {
+            "1": "https://cons.judicial.gov.tw/docdata.aspx?fid=38&id=310024",
+            "2": "https://cons.judicial.gov.tw/docdata.aspx?fid=38&id=309998",
+            "3": "https://cons.judicial.gov.tw/docdata.aspx?fid=38&id=340434"
+        }
+    };
     const lm = {
         "1": "https://cons.judicial.gov.tw/docdata.aspx?fid=100&id=310182",
         "2": "https://cons.judicial.gov.tw/docdata.aspx?fid=100&id=310183",
@@ -845,9 +852,26 @@
             obj.title = '';
         });
     }
+    const setDomStyle = function (obj, st) {
+        if (st == null || typeof st != 'object' || obj == null || typeof obj != 'object' || obj.tagName == null) return obj;
+        for (let i in st) {
+            if (st[i] == null || ['string', 'number'].indexOf(typeof st[i]) > -1) {
+                obj.style[i] = st[i];
+            }
+        }
+        return obj;
+    }
+
     // 跳轉指定釋字
     const createBtnOnNavbar = function () {
-        let b = document.getElementsByClassName('header-func');
+        let bd = document.querySelector('div.misc-wrap');
+        let bx = document.createElement('div');
+        bx = setDomStyle(bx, {
+            'borderLeft': '1px solid white',
+            'marginLeft': '0',
+            'paddingLeft': '15px'
+        });
+        bd.append(bx);
         let m = document.getElementsByClassName('fast-nav');
         let g = location.search.replace(/^(\?)/, '').split('&');
         let gl = {};
@@ -864,42 +888,46 @@
                 }
             }
         }
-        if (b[0] != null) {
-            let bx = b[0];
-            let t = document.createElement('input');
-            t.type = 'number';
-            t.min = 1;
-            t.max = 813;
-            t.placeholder = '釋字';
-            t.value = tv;
-            t.style.fontSize = '12px';
-            t.title = '請輸入範圍１～８１３的數字。';
-            let a = document.createElement('a');
-            a.style.color = 'white';
-            a.title = '連結到指定釋字';
-            let i = document.createElement('i');
-            i.classList = 'fa fa-share';
-            a.append(i);
-            bx.append(t);
-            bx.append(a);
-            let hl = function () {
-                if (lm[t.value] != null) {
-                    window.location.href = lm[t.value];
-                } else {
-                    alert('輸入錯誤，請輸入範圍１～８１３的數字。');
-                }
+        let lbl1 = document.createElement('span');
+        lbl1 = setDomStyle(lbl1, { 'color': 'white', 'fontSize': '.88rem' });
+        let lbl2 = lbl1.cloneNode();
+        lbl1.innerText = '釋字：';
+        lbl2.innerText = '判決：';
+        bx.append(lbl1);
+        let t = document.createElement('input');
+        t.type = 'number';
+        t.min = 1;
+        t.max = 813;
+        t.placeholder = '釋字';
+        t.value = tv;
+        t.style.fontSize = '12px';
+        t.title = '請輸入範圍１～８１３的數字。';
+        let a = document.createElement('a');
+        a.style.color = 'white';
+        a.title = '連結到指定釋字';
+        let i = document.createElement('i');
+        i.classList = 'fa fa-share';
+        i.style.marginLeft = '10px';
+        a.append(i);
+        bx.append(t);
+        bx.append(a);
+        let hl = function () {
+            if (lm[t.value] != null) {
+                window.location.href = lm[t.value];
+            } else {
+                alert('輸入錯誤，請輸入範圍１～８１３的數字。');
             }
-            t.addEventListener('keyup', function (e) {
-                if (e.keyCode == 13) hl();
-            });
-            t.addEventListener('click', function () {
-                t.select();
-            });
-            a.addEventListener('click', function () {
-                hl();
-                return false;
-            });
         }
+        t.addEventListener('keyup', function (e) {
+            if (e.keyCode == 13) hl();
+        });
+        t.addEventListener('click', function () {
+            t.select();
+        });
+        a.addEventListener('click', function () {
+            hl();
+            return false;
+        });
         if (m[0] != null) {
             let mx = m[0];
             let li = document.createElement('li');
